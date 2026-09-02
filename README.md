@@ -1,6 +1,6 @@
 **Minion Moon Heist!**
 
-A lightweight screen effect that unleashes a chaotic swarm of Minions across your display to execute Gru’s ultimate dream: storming the cosmos and planting a victory flag straight onto the moon.
+A lightweight screen effect that unleashes a chaotic swarm of Minions across your display to execute Gru’s ultimate dream: storming the cosmos and planting a victory flag straight onto the moon. 🍌🍌🍌
 <img width="1512" height="823" alt="Screenshot 2026-09-02 at 3 01 12 PM" src="https://github.com/user-attachments/assets/18f36e20-954a-4ae3-90c1-adc58ef65f9f" />
 
 **<u>Quick run**</u>
