@@ -1,19 +1,30 @@
-Minion Moon Heist
+Minion Moon Heist!
 
-Open `index.html` in a browser (or run a simple HTTP server) and click "Send Swarm" to launch a swarm of floating minions.
+A small HTML/CSS/JS effect that sends a swarm of minions swarming the moon and planting a victory flag.
 
-Quick local server:
+Quick run
+
+1. Open a terminal in the project root and start a simple HTTP server:
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000 in your browser
 ```
 
-Files:
-- index.html — demo page
-- styles.css — visual styles and keyframes
-- script.js — spawn logic
+2. Open your browser to http://localhost:8000
 
-Notes:
-- This demo uses simple DOM elements and CSS/RAF-based animation for a lightweight effect.
-- Feel free to tweak `count`, durations, and styles to suit your taste.
+Controls
+
+- Use the Send Swarm button in the UI to spawn minions.
+- Adjust Minion Count to change the swarm size.
+- The demo auto-spawns on load by default.
+
+Files of interest
+
+- [index.html](index.html) — main page and UI.
+- [styles.css](styles.css) — all visual styling (moon, stars, flag, minions).
+- [script.js](script.js) — spawning, steering, flag-carrying and planting logic.
+
+Notes & troubleshooting
+
+- If stars appear above the moon or flag, ensure `styles.css` sets `.stars { z-index: 0 }` and `.moon { z-index: 20 }`.
+- The planted flag persists until you click Send Swarm to reset.
