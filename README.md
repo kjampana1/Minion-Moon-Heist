@@ -1,4 +1,4 @@
-Minion Moon Heist!
+**Minion Moon Heist!**
 
 A small HTML/CSS/JS effect that sends a swarm of minions swarming the moon and planting a victory flag.
 <img width="1512" height="823" alt="Screenshot 2026-09-02 at 3 01 12 PM" src="https://github.com/user-attachments/assets/18f36e20-954a-4ae3-90c1-adc58ef65f9f" />
