@@ -1,0 +1,190 @@
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#071025 0%,#0b2a3e 100%);color:#fff;overflow:hidden}
+.controls{position:fixed;left:16px;top:16px;z-index:40;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);padding:10px;border-radius:8px;display:flex;gap:8px;align-items:center}
+.controls button{padding:8px 12px;border-radius:6px;border:0;background:#ffd54f;color:#1b1b1b;font-weight:600;cursor:pointer}
+.controls input{width:70px;padding:6px;border-radius:6px;border:0}
+
+.stage{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10}
+
+/* large moon on the right side */
+.moon{
+  position:absolute;
+  right:-8vh; /* nudge so it feels half-offscreen */
+  top:50%;
+  transform:translateY(-50%);
+  width:120vh;
+  height:120vh;
+  border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #f0f0f0 30%, #d6d6d6 60%, #bfbfbf 100%);
+  box-shadow:inset -20px -30px 60px rgba(0,0,0,0.18), 0 18px 60px rgba(2,6,23,0.6);
+  z-index:6;
+  filter:contrast(1.02) saturate(0.95);
+}
+.moon::before, .moon::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  transform:translate(-50%, -50%);
+}
+
+/* add more crater detail and subtle light sweep */
+.moon{
+  background:
+    radial-gradient(circle at 65% 20%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.6) 6%, rgba(255,255,255,0.0) 8%),
+    radial-gradient(circle at 30% 40%, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.06) 12%, rgba(0,0,0,0.0) 20%),
+    radial-gradient(circle at 22% 62%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.04) 10%, rgba(0,0,0,0.0) 18%),
+    radial-gradient(circle at 52% 72%, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0.05) 9%, rgba(0,0,0,0.0) 16%),
+    radial-gradient(circle at 70% 48%, rgba(0,0,0,0.09) 0%, rgba(0,0,0,0.06) 10%, rgba(0,0,0,0.0) 18%),
+    radial-gradient(circle at 40% 30%, #ffffff 0%, #f4f4f4 25%, #e0e0e0 60%, #bfbfbf 100%);
+  background-blend-mode: overlay, multiply, multiply, multiply, multiply, normal;
+  animation: moonLight 8s ease-in-out infinite;
+}
+
+@keyframes moonLight{
+  0%{filter:brightness(1) contrast(1)}
+  50%{filter:brightness(0.96) contrast(1.02) saturate(0.98)}
+  100%{filter:brightness(1) contrast(1)}
+}
+
+/* deeper moon detail: extra shadowing and small crater spots */
+.moon{
+  background-image: radial-gradient(circle at 18% 24%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.03) 18%, transparent 30%),
+                    radial-gradient(circle at 44% 14%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 12%, transparent 24%),
+                    radial-gradient(circle at 60% 62%, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.04) 16%, transparent 28%),
+                    radial-gradient(circle at 78% 30%, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0.03) 14%, transparent 26%);
+  background-blend-mode: multiply, screen, multiply, multiply, overlay;
+}
+.moon::before{opacity:0.95}
+
+/* crater dots for texture */
+.moon .crater{position:absolute;border-radius:50%;background:rgba(0,0,0,0.12);box-shadow:inset -4px -3px 6px rgba(255,255,255,0.06);}
+.moon .crater.c1{width:6%;height:6%;left:28%;top:36%}
+.moon .crater.c2{width:4%;height:4%;left:50%;top:68%}
+.moon .crater.c3{width:8%;height:8%;left:72%;top:46%}
+.moon .crater.c4{width:3%;height:3%;left:18%;top:62%}
+.moon .crater.c5{width:5%;height:5%;left:46%;top:30%}
+.moon .crater.c6{width:4%;height:4%;left:62%;top:22%}
+.moon .crater.c7{width:6%;height:6%;left:82%;top:58%}
+.moon .crater.c8{width:3.5%;height:3.5%;left:38%;top:78%}
+
+/* subtle inner rings for more realistic dents */
+.moon .craterRing{position:absolute;border-radius:50%;border:2px solid rgba(0,0,0,0.06);box-shadow:inset -6px -4px 10px rgba(255,255,255,0.03);}
+.moon .craterRing.r1{width:18%;height:18%;left:22%;top:34%;opacity:0.18}
+.moon .craterRing.r2{width:22%;height:22%;left:68%;top:48%;opacity:0.12}
+
+/* flag on the moon (hidden until planted) */
+.moon .flag{display:none}
+.moon.flag-planted .flag{display:block;position:absolute;left:20%;top:16%;width:22%;height:26%;transform:rotate(-10deg);transform-origin:left bottom;z-index:13;pointer-events:none}
+.moon.flag-planted .flag .pole{position:absolute;left:8%;top:-52%;bottom:6%;width:3%;background:linear-gradient(180deg,#3b3b3b,#222);border-radius:2px;box-shadow:inset -2px -2px 6px rgba(255,255,255,0.03), 0 4px 8px rgba(0,0,0,0.3)}
+.moon.flag-planted .flag .banner{position:absolute;left:14%;top:6%;background:transparent;color:#1b1b1b;padding:6px 8px;border-radius:6px;font-weight:800;font-size:clamp(9px,1.2vw,14px);box-shadow:0 6px 12px rgba(0,0,0,0.35);text-align:center;white-space:nowrap;transform-origin:left center;animation:flagWave 1.8s ease-in-out infinite}
+
+@keyframes flagWave{0%{transform:rotate(0deg)}25%{transform:rotate(6deg) translateY(-1px)}50%{transform:rotate(0deg)}75%{transform:rotate(-5deg) translateY(1px)}100%{transform:rotate(0deg)}}
+
+/* slight worn text effect */
+.moon.flag-planted .flag .banner{text-shadow:0 1px 0 rgba(255,255,255,0.72), 0 -1px 0 rgba(0,0,0,0.12)}
+
+/* carried flag (attached to the first minion) */
+.carried-flag{position:absolute;right:-8px;top:6px;width:56px;height:36px;display:flex;align-items:center;justify-content:flex-start;pointer-events:none;transform-origin:left center}
+.carried-flag .pole{width:3px;height:140%;background:#333;border-radius:2px;margin-left:4px;margin-right:6px}
+.carried-flag .triangle{width:72px;height:56px;background:#e33;clip-path:polygon(0 0,100% 50%,0 100%);display:flex;align-items:center;justify-content:center;position:relative;top:-8px}
+.carried-flag .triangle .label{position:static;transform:translateX(-6px);color:#fff;font-weight:800;font-size:11px;white-space:nowrap;padding:0 6px;max-width:86%;text-align:center}
+.carried-flag{z-index:20}
+
+/* planted triangular flag styling on moon */
+.moon.flag-planted .flag .triangle{position:absolute;left:10%;top:-52%;width:220px;height:140px;background:#e33;clip-path:polygon(0 0,100% 50%,0 100%);display:flex;align-items:center;justify-content:center;transform-origin:left center}
+.moon.flag-planted .flag .triangle .label{position:static;transform:translateX(-14px);color:#fff;font-weight:900;font-size:clamp(12px,1.2vw,20px);white-space:nowrap;padding:0 10px;max-width:78%;text-align:center}
+
+/* planted flag cloth sway and subtle texture movement */
+.moon.flag-planted .flag .triangle{
+  background: linear-gradient(90deg, #e33 0%, #d22 50%, #e33 100%);
+  background-size: 200% 100%;
+  animation: flagSway 3.6s ease-in-out infinite, flagShift 6s linear infinite;
+}
+
+@keyframes flagSway{
+  0% { transform: translateX(0) rotate(-4deg) skewX(-2deg); }
+  20% { transform: translateX(3px) rotate(-1deg) skewX(0deg); }
+  40% { transform: translateX(0) rotate(2deg) skewX(2deg); }
+  60% { transform: translateX(-3px) rotate(1deg) skewX(0deg); }
+  80% { transform: translateX(0) rotate(-1deg) skewX(-1deg); }
+  100% { transform: translateX(0) rotate(-4deg) skewX(-2deg); }
+}
+
+@keyframes flagShift{
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* stars background */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:rgba(255,255,255,0.9);box-shadow:0 0 8px rgba(255,255,255,0.6);opacity:0.9}
+.star.small{width:1px;height:1px;box-shadow:0 0 6px rgba(255,255,255,0.45)}
+.star.med{width:2px;height:2px;box-shadow:0 0 8px rgba(255,255,255,0.6)}
+.star.big{width:3px;height:3px;box-shadow:0 0 12px rgba(255,255,255,0.85)}
+.star.twinkle{animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%{opacity:0.6;transform:scale(0.9)}50%{opacity:1;transform:scale(1.12)}100%{opacity:0.65;transform:scale(0.95)}}
+
+/* Visibility override: bring moon more on-screen and increase contrast */
+.moon{
+  right:-6vh; /* move slightly more on-screen */
+  width:90vh;
+  height:90vh;
+  background-color:#f6f6f4; /* base to ensure visibility */
+  border:5px solid rgba(255,255,255,0.04);
+  box-shadow: inset -28px -34px 84px rgba(0,0,0,0.32), 0 44px 120px rgba(3,8,28,0.75), 0 0 88px rgba(255,255,255,0.06);
+  filter:brightness(1.12) contrast(1.08) saturate(1.03);
+  z-index:20;
+}
+.moon::before{width:12%;height:12%;left:32%;top:40%;box-shadow:inset -6px -4px 8px rgba(255,255,255,0.2)}
+.moon::after{width:8%;height:8%;left:58%;top:60%;box-shadow:inset -4px -3px 6px rgba(255,255,255,0.18)}
+
+
+
+.minion{
+  position:absolute;
+  left:0;
+  top:0;
+  width:46px;
+  height:56px;
+  border-radius:40%/30%;
+  background:#ffd54f;
+  box-shadow:0 6px 14px rgba(3,3,3,0.35);
+  transform-origin:center center;
+  will-change:transform,opacity;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+  z-index:31;
+}
+
+/* wrapper handles horizontal across animation so inner .minion can use transforms freely */
+.minion-wrap{position:absolute;left:-10%;top:50%;width:64px;height:80px;pointer-events:none;will-change:transform;display:block}
+.minion-wrap{z-index:30}
+.minion::before{content:"";position:absolute;left:50%;top:12px;transform:translateX(-50%);width:28px;height:20px;border-radius:12px;background:#c0c0c0;border:4px solid #333;box-shadow:inset 0 -6px 6px rgba(0,0,0,0.12)}
+.minion::after{content:"";position:absolute;left:50%;top:18px;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #333}
+
+/* horizontal travel */
+@keyframes across{
+  0%{transform:translateX(-10vw) translateY(var(--y,0)) rotate(var(--r,0deg)) scale(var(--s,1));opacity:0}
+  5%{opacity:1}
+  100%{transform:translateX(110vw) translateY(var(--y,0)) rotate(calc(var(--r) + 90deg)) scale(var(--s,1));opacity:1}
+}
+/* vertical bob */
+@keyframes bob{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(var(--bob,10px))}
+  100%{transform:translateY(0)}
+}
+
+/* combine via nested wrappers handled in JS */
+
+/* subtle blur trails */
+.minion .glow{position:absolute;inset:auto auto 4px 4px;width:14px;height:14px;border-radius:50%;background:rgba(255,235,59,0.45);filter:blur(6px);opacity:0.8}
+
+/* performance: hide offscreen items */
+.minion[aria-hidden="true"]{display:none}
+
+/* responsive */
+@media (max-width:520px){.minion{width:36px;height:44px}.controls input{width:56px}}
